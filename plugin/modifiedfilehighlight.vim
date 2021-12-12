@@ -58,7 +58,7 @@ function s:ShowModifiedBufferInnit(...)
   augroup ShowModifiedBuffer
 
     if g:modifiedfilehighlight
-      autocmd TextChanged,TextChangedI,BufWinEnter,TabEnter * call s:ShowModifiedBufferStatus()
+      autocmd TextChanged,TextChangedI,BufWinEnter,TabEnter,BufWritePost  * call s:ShowModifiedBufferStatus()
 
       if &cursorline
         autocmd WinEnter * set cursorline

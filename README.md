@@ -56,6 +56,7 @@ On Event: loop through all buffers on tab using `tabpagebuflist()`. If a Buffer'
   * `TextChangedI`  => Text Changed in Insert Mode
   * `BufWinEnter`   => After a Buffer is Displayed
   * `TabEnter`      => After Entering another Tab
+  * `BufWritePost`  => After Writing Buffer to File (save)
   * Also: `OptionSet`, if available, but above events are mainly what are called.
 
 ###### `tabpagebuflist()` *My Understanding*
