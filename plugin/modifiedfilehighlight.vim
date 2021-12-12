@@ -14,9 +14,6 @@
 "       autocmd events for when to check if Modified
 "
 " Note: Change Color of bg by changing `ColorColumn` (Highlight)
-"
-" TODO:
-"   1. Smarter autocmd events
 
 if exists('g:loaded_ModifiedFileHighlight') || (v:version < 730) || (! has('gui_running') && &t_Co <= 2) || (!exists('+colorcolumn'))
     finish
@@ -61,7 +58,7 @@ function s:ShowModifiedBufferInnit(...)
   augroup ShowModifiedBuffer
 
     if g:modifiedfilehighlight
-      autocmd BufWinEnter,WinEnter,CmdwinEnter,CursorHold,CursorHoldI,BufWritePost * call s:ShowModifiedBufferStatus()
+      autocmd TextChanged,TextChangedI,BufWinEnter,TabEnter * call s:ShowModifiedBufferStatus()
 
       if &cursorline
         autocmd WinEnter * set cursorline

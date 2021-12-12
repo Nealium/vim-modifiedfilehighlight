@@ -49,10 +49,14 @@ highlight Normal guibg=#292824
 ```
 
 ### How it Works
-On Event: loop through all buffers using `tabpagebuflist()`. If a Buffer's `changed` attribute is true, turn on all colorcolumns for that window, else turn all off
+On Event: loop through all buffers on tab using `tabpagebuflist()`. If a Buffer's `changed` attribute is true, turn on all colorcolumns for that window, else turn all off
 
-* Current Events: `BufWinEnter,WinEnter,CmdwinEnter,CursorHold,CursorHoldI,BufWritePost`
-  * Also: `OptionSet` but above events are mainly what are called.
+* Current Events:
+  * `TextChanged`   => Text Changed in Normal Mode
+  * `TextChangedI`  => Text Changed in Insert Mode
+  * `BufWinEnter`   => After a Buffer is Displayed
+  * `TabEnter`      => After Entering another Tab
+  * Also: `OptionSet`, if available, but above events are mainly what are called.
 
 ###### `tabpagebuflist()` *My Understanding*
 ```vim
@@ -77,6 +81,3 @@ ex_tabpagebuflist = [2, 3, 4, 2]
 " This is the general idea
 "   I assume it depends on Open Order
 ```
-
-### Planned Upgrades
-1. Smarter autocmd events
