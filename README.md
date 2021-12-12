@@ -16,7 +16,7 @@ This plugin changes the Background of Windows that have Edited Buffers Open.
 
 ### Install Guide
 * Package way:
-  * Download, the place into plugin folder
+  * Download, then place into plugin folder
     * Mine is: `~/vimfiles/pack/plugin/start/`
 * vimrc way:
   * Open: `modifiedfilehighlight.vim`
@@ -64,8 +64,5 @@ highlight Normal guibg=#292824
 ```
 
 ### Planned Upgrades
-1. Remove Nested Loop
+1. Add `Ignore` List
 2. Smarter autocmd events
-3. Add `Ignore` List
-4. Testing
-

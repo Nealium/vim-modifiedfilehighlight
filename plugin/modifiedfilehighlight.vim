@@ -16,31 +16,20 @@
 " Note: Change Color of bg by changing `ColorColumn` (Highlight)
 "
 " TODO:
-"   1. Remove Nested Loop
+"   1. Add `Ignore` List
 "   2. Smarter autocmd events
-"   3. Add `Ignore` List
-"   4. Testing
-
 
 if exists('g:loaded_ModifiedFileHighlight') || (v:version < 730) || (! has('gui_running') && &t_Co <= 2) || (!exists('+colorcolumn'))
     finish
 endif
-let g:loaded_SModifiedFileHighlight= 1
+let g:loaded_ModifiedFileHighlight = 1
 
 function! s:ShowModifiedBufferStatus()
   let l:page = 1
   for i in tabpagebuflist()
     let l:range = ""
-    let l:changed = 0
 
-    for j in getbufinfo()
-      if j.bufnr == i
-        let l:changed = j.changed
-        break
-      endif
-    endfor
-
-    if l:changed == 1
+    if getbufvar(i, '&mod') && g:modifiedfilehighlight
       if &wrap
        " HACK: when wrapping lines is enabled, we use the maximum number
        " of columns getting highlighted. This might get calculated by
@@ -57,19 +46,35 @@ function! s:ShowModifiedBufferStatus()
   endfor
 endfunction
 
-augroup ShowModifiedBuffer
-  au!
 
-  autocmd BufWinEnter,WinEnter,CmdwinEnter,CursorHold,CursorHoldI,BufWritePost * call s:ShowModifiedBufferStatus()
+function s:ShowModifiedBufferInnit(...)
+  augroup ShowModifiedBuffer
 
-  if &cursorline
-    au WinEnter * set cursorline
-    au WinLeave * set nocursorline
-  endif
+    if g:modifiedfilehighlight
+      autocmd BufWinEnter,WinEnter,CmdwinEnter,CursorHold,CursorHoldI,BufWritePost * call s:ShowModifiedBufferStatus()
 
-  if exists('##OptionSet')
-    autocmd OptionSet modified call s:ShowModifiedBufferStatus()
-  endif
-augroup END
+      if &cursorline
+        autocmd WinEnter * set cursorline
+        autocmd WinLeave * set nocursorline
+      endif
+
+      if exists('##OptionSet')
+        autocmd OptionSet modified call s:ShowModifiedBufferStatus()
+      endif
+    else
+      call s:ShowModifiedBufferStatus()
+    endif
+  augroup END
+endfunction
+
+if !(exists('g:modifiedfilehighlight'))
+  " if not defined, auto set to on
+  let g:modifiedfilehighlight=1
+endif
+
+" Basic On + Off Commands
+command! ModifiedFileHighlightOn let g:modifiedfilehighlight=1 | call s:ShowModifiedBufferInnit()
+command! ModifiedFileHighlightOff let g:modifiedfilehighlight=0 | call s:ShowModifiedBufferInnit()
 
 
+call s:ShowModifiedBufferInnit()
