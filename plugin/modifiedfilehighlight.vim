@@ -16,8 +16,7 @@
 " Note: Change Color of bg by changing `ColorColumn` (Highlight)
 "
 " TODO:
-"   1. Add `Ignore` List
-"   2. Smarter autocmd events
+"   1. Smarter autocmd events
 
 if exists('g:loaded_ModifiedFileHighlight') || (v:version < 730) || (! has('gui_running') && &t_Co <= 2) || (!exists('+colorcolumn'))
     finish
@@ -30,16 +29,27 @@ function! s:ShowModifiedBufferStatus()
     let l:range = ""
 
     if getbufvar(i, '&mod') && g:modifiedfilehighlight
-      if &wrap
-       " HACK: when wrapping lines is enabled, we use the maximum number
-       " of columns getting highlighted. This might get calculated by
-       " looking for the longest visible line and using a multiple of
-       " winwidth().
-       let l:width=256 " max
-      else
-       let l:width=winwidth(l:page)
+      let l:skip = 0
+
+      let l:name = bufname(i)
+      if g:modifiedfilehighlight_ignore_no_name==1 && len(l:name) == 0
+        let l:skip = 1
+      elseif exists('g:modifiedfilehighlight_ignore')
+        let l:skip = !(empty(matchstr(l:name, g:modifiedfilehighlight_ignore)))
       endif
-      let l:range = join(range(1, l:width), ',')
+
+      if !(l:skip)
+        if &wrap
+         " HACK: when wrapping lines is enabled, we use the maximum number
+         " of columns getting highlighted. This might get calculated by
+         " looking for the longest visible line and using a multiple of
+         " winwidth().
+         let l:width=256 " max
+        else
+         let l:width=winwidth(l:page)
+        endif
+        let l:range = join(range(1, l:width), ',')
+      endif
     endif
     call setwinvar(l:page, '&colorcolumn', l:range)
     let l:page = l:page+1
@@ -67,9 +77,12 @@ function s:ShowModifiedBufferInnit(...)
   augroup END
 endfunction
 
+" Set Default Vars if no defined elsewhere
 if !(exists('g:modifiedfilehighlight'))
-  " if not defined, auto set to on
   let g:modifiedfilehighlight=1
+endif
+if !(exists('g:modifiedfilehighlight_ignore_no_name'))
+  let g:modifiedfilehighlight_ignore_no_name=1
 endif
 
 " Basic On + Off Commands

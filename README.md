@@ -6,7 +6,7 @@ This plugin changes the Background of Windows that have Edited Buffers Open.
 
 ### Requirements
 * ~ Vim V7.3 *(but unsure)*
-  * Don't know when `getbufinfo()` Command was added:
+  * Don't know when `getbufvar()` Command was added:
   * Used Sources to get a ballpark
 * *Note:* Only Tested on My Windows 10 machine using GVIM 8.1
 
@@ -23,6 +23,30 @@ This plugin changes the Background of Windows that have Edited Buffers Open.
   * Copy: `s:ShowModifiedBufferStatus()` -> `augroup END`
   * Paste in your vimrc
   * *Note:* Make a Copy of vimrc beforehand incase it hits the fan
+
+### Controls
+* General
+  * `ModifiedFileHighlightOn` = Global On
+  * `ModifiedFileHighlightOff` = Global Off
+* vimrc Options
+  * `let g:modifiedfilehighlight_ignore_no_name=0`
+    * Show for 'New Files'
+    * Default set to 1, or don't
+  * `let g:modifiedfilehighlight_ignore='{REGEX}'`
+    * Ignore Files that match regex
+    * Uses `bufname()` which pulls the path not just the name, so take that into account
+    * Simple check with `!empty(matchstr({filename}, {regex}))`
+      * Not empty, Skip it.
+
+
+###### Changing Highlight `ColorColumn`
+* Advice: Make it slightly different but noticeable+bearable
+```vim
+" My Settings (_vimrc)
+
+highlight ColorColumn guibg=#2f2f2f
+highlight Normal guibg=#292824
+```
 
 ### How it Works
 On Event: loop through all buffers using `tabpagebuflist()`. If a Buffer's `changed` attribute is true, turn on all colorcolumns for that window, else turn all off
@@ -54,15 +78,5 @@ ex_tabpagebuflist = [2, 3, 4, 2]
 "   I assume it depends on Open Order
 ```
 
-###### Changing Highlight `ColorColumn`
-* Advice: Make it slightly different but noticeable+bearable
-```vim
-" My Settings (_vimrc)
-
-highlight ColorColumn guibg=#2f2f2f
-highlight Normal guibg=#292824
-```
-
 ### Planned Upgrades
-1. Add `Ignore` List
-2. Smarter autocmd events
+1. Smarter autocmd events
