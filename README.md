@@ -1,14 +1,17 @@
 # Modified File Highlight
 This plugin changes the Background of Windows that have Edited Buffers Open.
 
+### Why?
+Ever wonder why your fix didn't work and then realize it's because you didn't save the file? Irritating 
+
 ### Screenshot
 ![Screenshot](screenshot.png)
 
 ### Requirements
 * ~ Vim V7.3 *(but unsure)*
-  * Don't know when `getbufvar()` Command was added:
+  * Don't know when `getbufvar()` Command was added
   * Used Sources to get a ballpark
-* *Note:* Only Tested on My Windows 10 machine using GVIM 8.1
+* *Note:* Only Tested on My Windows 10 machine using vim 8.1 (Gvim, Powershell, Cmder)
 
 ### Sources / Based on
 * [vim-diminactive](https://github.com/blueyed/vim-diminactive)
@@ -43,12 +46,22 @@ This plugin changes the Background of Windows that have Edited Buffers Open.
 * Advice: Make it slightly different but noticeable+bearable
 ```vim
 " My Settings (_vimrc)
+" 
+" Note: can conflict with cursorline
 
 highlight ColorColumn guibg=#2f2f2f
 highlight Normal guibg=#292824
 ```
 
+### Things to Do
+* Add a better `Ignore` System
+* Having a very long file open in two side-by-side vertical spilts, has lag. Look into possible solutions.
+  * Not common from my use, but very annoying when it happens
+
+
 ### How it Works
+**Mostly Notes for Myself**
+
 On Event: loop through all buffers on tab using `tabpagebuflist()`. If a Buffer's `changed` attribute is true, turn on all colorcolumns for that window, else turn all off
 
 * Current Events:
